@@ -168,7 +168,7 @@ define adobe_em6::instance::apply_osgi_config (
 
   ## Use aem_bundle_status.rb to make sure AEM has started up succesfully before deploying packages.  Will exit(1),and exec will retry if not
   exec { "Package/Deploy OSGI Config for ${title}":
-    command => "set -e ; ${adobe_em6::params::dir_tools}/aem_bundle_status.rb -a http://localhost:${port}/system/console/bundles.json -u ${aem_bundle_status_user} -p ${aem_bundle_status_passwd}; /bin/rm -rf *.zip ; /usr/bin/zip -r ${package_zip_file} * ; /bin/mv -f ${package_zip_file} ${package_zip_install_folder}",
+    command => "bash -l -c 'set -e ; ${adobe_em6::params::dir_tools}/aem_bundle_status.rb -a http://localhost:${port}/system/console/bundles.json -u ${aem_bundle_status_user} -p ${aem_bundle_status_passwd}; /bin/rm -rf *.zip ; /usr/bin/zip -r ${package_zip_file} * ; /bin/mv -f ${package_zip_file} ${package_zip_install_folder}'",
     provider => 'shell',
     cwd     => "${tmp_osgi_dir}/${title}",
     subscribe => File["${tmp_osgi_dir}/${title}/jcr_root/apps/system/config/${title}.xml"],
